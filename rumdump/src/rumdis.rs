@@ -51,8 +51,31 @@ get(&RA, inst),
 get(&RB, inst)
 )
 }
+Some(Opcode::Add) =>{
+format!("r{} := r{} + r{};", get(&RA, inst), get(&RB, inst), get(&RC, inst))
+
+}
+
+Some(Opcode::Mult) =>{
+    format!("r{} := r{} * r{};", get(&RA, inst), get(&RB, inst), get(&RC, inst))
+    
+    }
+
+Some(Opcode::Div) =>{
+    format!("r{} := r{} / r{};", get(&RA, inst), get(&RB, inst), get(&RC, inst))
+        
+    }
+
+Some(Opcode::Halt) =>{
+    format!("Halt")
+            
+    }
+
+
+Some(Opcode::Halt) =>{
+    format!("Halt")
+                
+    }
+
 }
 }
-
-
-
