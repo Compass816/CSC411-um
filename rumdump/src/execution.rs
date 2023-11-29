@@ -97,10 +97,17 @@ pub fn input() {
 }
 
 pub fn loadp(registers: &mut Registers, memory: &Memory, b: u32, c: u32) {
-    let Some(segment) = memory.get(&(registers.data[b as usize]));
-    let a = memory.get(&0).unwrap();
-    
-     Some(segment);
+    // Duplicate the value at $m[$r[B]] and replace $m[0]
+    let segment = memory.get(&(registers.data[b as usize])).unwrap();
+    let mut m0 = memory.get_mut(&0).unwrap();
+    m0 = segment;
+
+    // Update the program counter to point to $m[0][$r[C]]
+    if let Some(segment) = memory.get(&(registers.data[0])) {
+        if let Some(value) = segment.get(registers.data[c as usize] as usize) {
+            memory.program_counter = *value;
+        }
+    }
 }
 
 pub fn loadv(registers: &mut Registers, rv: u32, vl: u32) {

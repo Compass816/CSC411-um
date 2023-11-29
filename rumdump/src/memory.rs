@@ -26,6 +26,10 @@ impl Memory {
         self.data.get(id)
     }
 
+    pub fn get_mut(&mut self, id: &u32) -> &mut Option<&Vec<u32>> {
+        &mut self.data.get(id)
+    }
+
     pub fn add(&mut self, id: u32, val: Vec<u32>) {
         self.data.insert(id, val);
     }
