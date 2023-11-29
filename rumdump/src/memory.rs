@@ -4,7 +4,9 @@ use std::collections::HashMap;
 
 pub struct Memory {
     data: HashMap<u32, Vec<u32>>,
-    mem_ids: Vec<u32>
+    pub mem_ids: Vec<u32>,
+    pub latest_id: u32,
+    pub program_counter: u32
 }
 
 impl Memory {
@@ -14,7 +16,9 @@ impl Memory {
 
         Memory { 
             data,
-            mem_ids: vec![]
+            mem_ids: vec![],
+            latest_id: 1,
+            program_counter: 0
         }
     }
 

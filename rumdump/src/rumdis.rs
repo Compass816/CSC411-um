@@ -1,5 +1,3 @@
-use std::simd::SimdConstPtr;
-
 use crate::memory::{Memory, Registers};
 
 #[derive(Debug, PartialEq, Copy, Clone, FromPrimitive)]
@@ -175,8 +173,9 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         
         Some(Opcode::Map) => {
             let b = get(&RB, inst);
+            let c = get(&RC, inst);
 
-            execution::map(registers, memory, b)
+            execution::map(registers, memory, b, c)
 
             // format!(
             //     "m[r{}];",
@@ -188,7 +187,7 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         Some(Opcode::Unmap) => {
             let c = get(&RC, inst);
 
-            execution::map(registers, memory, c)
+            execution::unmap(registers, memory, c)
 
             // format!(
             //     "m[r{}];",

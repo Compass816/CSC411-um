@@ -10,7 +10,7 @@ pub fn cmov(registers: &mut Registers, a: u32, b: u32, c: u32) {
     }
 }
 
-pub fn load(registers: &mut Registers, memory: &mut Memory, a: u32, b: u32, c: u32) {
+pub fn load(registers: &mut Registers, memory: &Memory, a: u32, b: u32, c: u32) {
     let a = registers.data[a as usize];
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
@@ -22,7 +22,7 @@ pub fn load(registers: &mut Registers, memory: &mut Memory, a: u32, b: u32, c: u
     }
 }
 
-pub fn store(registers: &mut Registers, memory: Memory, a: u32, b: u32, c: u32) {
+pub fn store(registers: &mut Registers, memory: &Memory, a: u32, b: u32, c: u32) {
     let a = registers.data[a as usize];
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
@@ -66,12 +66,26 @@ pub fn halt() {
     println!("Halt");
 }
 
-pub fn map() {
+pub fn map(registers: &mut Registers, memory: &Memory, b: u32, c: u32) {
+    let seg = vec![0_u32; registers.data[c as usize] as usize];
 
+    // Grab the highest unused id if there are no previously unmapped ids available
+    let mut id = 0_u32;
+
+    if memory.mem_ids.is_empty() {
+        id = memory.latest_id;
+    } else {
+        id = memory.mem_ids[0];
+    }
+
+    memory.add(id, seg);
 }
 
-pub fn unmap() {
+pub fn unmap(registers: &mut Registers, memory: &Memory, c: u32) {
+    // Add the unmapped id to the vec of unmapped ids
+    memory.mem_ids.push(registers.data[c as usize]);
 
+    memory.remove(&registers.data[c as usize]);
 }
 
 pub fn output() {
@@ -82,8 +96,11 @@ pub fn input() {
 
 }
 
-pub fn loadp() {
-
+pub fn loadp(registers: &mut Registers, memory: &Memory, b: u32, c: u32) {
+    let Some(segment) = memory.get(&(registers.data[b as usize]));
+    let a = memory.get(&0).unwrap();
+    
+     Some(segment);
 }
 
 pub fn loadv(registers: &mut Registers, rv: u32, vl: u32) {
