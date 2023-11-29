@@ -17,7 +17,7 @@ pub fn add(registers: &mut Registers, a: u32, b: u32, c: u32) {
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
 
-    // Then do the acutal addition
+    registers.data[a as usize] = (registers.data[b as usize] + registers.data[c as usize]) % (2_u32.pow(32));
 }
 
 pub fn mult() {
