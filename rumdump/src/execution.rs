@@ -1,7 +1,13 @@
 use crate::memory::{Memory, Registers};
 
-pub fn cmov() {
+pub fn cmov(registers: &mut Registers, a: u32, b: u32, c: u32) {
+    let a = registers.data[a as usize];
+    let b = registers.data[b as usize];
+    let c = registers.data[c as usize];
 
+    if registers.data[c as usize] != 0 {
+        registers.data[a as usize] = registers.data[b as usize];
+    }
 }
 
 pub fn load() {
@@ -16,19 +22,35 @@ pub fn add(registers: &mut Registers, a: u32, b: u32, c: u32) {
     let a = registers.data[a as usize];
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
-
     registers.data[a as usize] = (registers.data[b as usize] + registers.data[c as usize]) % (2_u32.pow(32));
+
+    // Then do the acutal addition
 }
 
-pub fn mult() {
+pub fn mult(registers: &mut Registers, a: u32, b: u32, c: u32) {
+    let a = registers.data[a as usize];
+    let b = registers.data[b as usize];
+    let c = registers.data[c as usize];
+    registers.data[a as usize] = (registers.data[b as usize] * registers.data[c as usize]) % (2_u32.pow(32));
+
+
 
 }
 
-pub fn div() {
+pub fn div(registers: &mut Registers, a: u32, b: u32, c: u32) {
+    let a = registers.data[a as usize];
+    let b = registers.data[b as usize];
+    let c = registers.data[c as usize];
+    registers.data[a as usize] = registers.data[b as usize] / registers.data[c as usize];
 
 }
 
-pub fn nand() {
+pub fn nand(registers: &mut Registers, a: u32, b: u32, c: u32) {
+    let a = registers.data[a as usize];
+    let b = registers.data[b as usize];
+    let c = registers.data[c as usize];
+    registers.data[a as usize] = !(registers.data[b as usize] & registers.data[c as usize]);
+
 
 }
 
@@ -56,6 +78,14 @@ pub fn loadp() {
 
 }
 
-pub fn loadv() {
+pub fn loadv(registers: &mut Registers, rv: u32, vl: u32) {
+    let a = registers.data[rv as usize];
+    let b = vl;
+
+    registers.data[a as usize] = b as u32;
+
+
+
+
 
 }
