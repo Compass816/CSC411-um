@@ -79,6 +79,12 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         }
 
         Some(Opcode::Mult) => {
+            let a = get(&RA, inst);
+            let b = get(&RB, inst);
+            let c = get(&RC, inst);
+
+            execution::mult(registers, a, b, c)
+
             // format!(
             //     "r{} := r{} * r{};",
             //     get(&RA, inst),
@@ -88,6 +94,12 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         }
 
         Some(Opcode::Div) => {
+            let a = get(&RA, inst);
+            let b = get(&RB, inst);
+            let c = get(&RC, inst);
+
+            execution::div(registers, a, b, c)
+
             // format!(
             //     "r{} := r{} / r{};",
             //     get(&RA, inst),
@@ -101,6 +113,11 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         }
 
         Some(Opcode::Loadv) => {
+            let rl = get(&RL, inst);
+            let vl = get(&VL, inst);
+
+            execution::loadv(registers rl, vl)
+
             // format!(
             //     "r{} := v{};",
             //     get(&RL, inst),
@@ -109,6 +126,12 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         }
 
         Some(Opcode::Nand) => {
+            let a = get(&RA, inst);
+            let b = get(&RB, inst);
+            let c = get(&RC, inst);
+
+            execution::nand(registers, a, b, c)
+
             // format!(
             //     "r{} := r{} ∧ r{};",
             //     get(&RA, inst),
@@ -118,6 +141,12 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         }
 
         Some(Opcode::Store) => {
+            let a = get(&RA, inst);
+            let b = get(&RB, inst);
+            let c = get(&RC, inst);
+
+            execution::store(registers, memory, a, b, c)
+
             // format!(
             //     "m[r{}][r{}] := r{};",
             //     get(&RA, inst),
@@ -127,6 +156,12 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         }
 
         Some(Opcode::Load) => {
+            let a = get(&RA, inst);
+            let b = get(&RB, inst);
+            let c = get(&RC, inst);
+
+            execution::load(registers, memory, a, b, c)
+
             // format!(
             //     "r{} := m[r{}][r{}];",
             //     get(&RA, inst),
@@ -137,6 +172,10 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
 
         
         Some(Opcode::Map) => {
+            let b = get(&RB, inst);
+
+            execution::map(registers, memory, b)
+
             // format!(
             //     "m[r{}];",
             //     get(&RB, inst),
@@ -145,6 +184,10 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         }
           
         Some(Opcode::Unmap) => {
+            let c = get(&RC, inst);
+
+            execution::map(registers, memory, c)
+
             // format!(
             //     "m[r{}];",
             //     get(&RC, inst),
@@ -153,6 +196,10 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         }
 
         Some(Opcode::Output) => {
+            let c = get(&RC, inst);
+
+            execution::output(registers, c)
+
             // format!(
             //     "r{} := r{};",
             //     get(&RC, inst),
@@ -162,6 +209,10 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         }
 
         Some(Opcode::Input) => {
+            let c = get(&RC, inst);
+
+            execution::input(registers, c)
+
             // format!(
             //     "r{} := r{};",
             //     get(&RC, inst),
@@ -172,6 +223,11 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
         }
 
         Some(Opcode::Loadp) => {
+            let b = get(&RB, inst);
+            let c = get(&RC, inst);
+
+            execution::output(registers, memory, b, c)
+
             // format!(
             //     "m[0] := m[r{}];",
             //     get(&RB, inst),

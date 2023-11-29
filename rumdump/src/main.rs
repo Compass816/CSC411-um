@@ -1,6 +1,5 @@
 use rumdump::rumdis;
 use rumdump::rumload;
-use rumdump::execution;
 use rumdump::memory::{Memory, Registers};
 use std::env;
 
