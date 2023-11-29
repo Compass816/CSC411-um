@@ -1,3 +1,5 @@
+use std::process;
+
 use crate::memory::{Memory, Registers, self};
 
 pub fn cmov(registers: &mut Registers, a: u32, b: u32, c: u32) {
@@ -63,7 +65,7 @@ pub fn nand(registers: &mut Registers, a: u32, b: u32, c: u32) {
 }
 
 pub fn halt() {
-    println!("Halt");
+    process::exit(0);
 }
 
 pub fn map(registers: &mut Registers, memory: &Memory, b: u32, c: u32) {
