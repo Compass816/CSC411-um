@@ -23,8 +23,6 @@ pub fn add(registers: &mut Registers, a: u32, b: u32, c: u32) {
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
     registers.data[a as usize] = (registers.data[b as usize] + registers.data[c as usize]) % (2_u32.pow(32));
-
-    // Then do the acutal addition
 }
 
 pub fn mult(registers: &mut Registers, a: u32, b: u32, c: u32) {
@@ -32,9 +30,6 @@ pub fn mult(registers: &mut Registers, a: u32, b: u32, c: u32) {
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
     registers.data[a as usize] = (registers.data[b as usize] * registers.data[c as usize]) % (2_u32.pow(32));
-
-
-
 }
 
 pub fn div(registers: &mut Registers, a: u32, b: u32, c: u32) {
@@ -42,7 +37,6 @@ pub fn div(registers: &mut Registers, a: u32, b: u32, c: u32) {
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
     registers.data[a as usize] = registers.data[b as usize] / registers.data[c as usize];
-
 }
 
 pub fn nand(registers: &mut Registers, a: u32, b: u32, c: u32) {
@@ -50,12 +44,10 @@ pub fn nand(registers: &mut Registers, a: u32, b: u32, c: u32) {
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
     registers.data[a as usize] = !(registers.data[b as usize] & registers.data[c as usize]);
-
-
 }
 
 pub fn halt() {
-
+    println!("Halt");
 }
 
 pub fn map() {
@@ -80,12 +72,6 @@ pub fn loadp() {
 
 pub fn loadv(registers: &mut Registers, rv: u32, vl: u32) {
     let a = registers.data[rv as usize];
-    let b = vl;
 
-    registers.data[a as usize] = b as u32;
-
-
-
-
-
+    registers.data[a as usize] = vl as u32;
 }
