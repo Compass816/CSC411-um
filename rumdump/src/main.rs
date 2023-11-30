@@ -10,12 +10,12 @@ fn main() {
 
     let mut registers = Registers::default();
 
-    let memory = Memory::new(0, instructions);
+    let mut memory = Memory::new(0, instructions);
 
     if let Some(instruction_vec) = memory.get(&0) {
         for instruction in instruction_vec {
             // Run rumdis, match the op code, run one of the functions below
-            rumdis::disassemble(&mut registers, &memory, *instruction)
+            rumdis::disassemble(&mut registers, &mut memory, *instruction)
         }
     }
 }

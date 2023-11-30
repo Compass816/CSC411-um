@@ -52,7 +52,7 @@ fn op(instruction: Umi) -> Option<Opcode> {
     FromPrimitive::from_u32((instruction >> OP.lsb) & mask(OP.width))
 }
 
-pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
+pub fn disassemble(registers: &mut Registers, memory: &mut Memory, inst: Umi) {
     // match FromPrimitive::from_u32(get(&OP, inst)) {
     match op(inst) {
         Some(Opcode::CMov) => {
@@ -227,7 +227,7 @@ pub fn disassemble(registers: &mut Registers, memory: &Memory, inst: Umi) {
             let b = get(&RB, inst);
             let c = get(&RC, inst);
 
-            execution::output(registers, memory, b, c)
+            execution::loadp(registers, memory, b, c)
 
             // format!(
             //     "m[0] := m[r{}];",

@@ -10,7 +10,7 @@ pub fn cmov(registers: &mut Registers, a: u32, b: u32, c: u32) {
     }
 }
 
-pub fn load(registers: &mut Registers, memory: &Memory, a: u32, b: u32, c: u32) {
+pub fn load(registers: &mut Registers, memory: &mut Memory, a: u32, b: u32, c: u32) {
     let a = registers.data[a as usize];
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
@@ -22,7 +22,7 @@ pub fn load(registers: &mut Registers, memory: &Memory, a: u32, b: u32, c: u32) 
     }
 }
 
-pub fn store(registers: &mut Registers, memory: &Memory, a: u32, b: u32, c: u32) {
+pub fn store(registers: &mut Registers, memory: &mut Memory, a: u32, b: u32, c: u32) {
     let a = registers.data[a as usize];
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
@@ -66,7 +66,7 @@ pub fn halt() {
     println!("Halt");
 }
 
-pub fn map(registers: &mut Registers, memory: &Memory, b: u32, c: u32) {
+pub fn map(registers: &mut Registers, memory: &mut Memory, b: u32, c: u32) {
     let seg = vec![0_u32; registers.data[c as usize] as usize];
 
     // Grab the highest unused id if there are no previously unmapped ids available
@@ -81,26 +81,33 @@ pub fn map(registers: &mut Registers, memory: &Memory, b: u32, c: u32) {
     memory.add(id, seg);
 }
 
-pub fn unmap(registers: &mut Registers, memory: &Memory, c: u32) {
+pub fn unmap(registers: &mut Registers, memory: &mut Memory, c: u32) {
     // Add the unmapped id to the vec of unmapped ids
     memory.mem_ids.push(registers.data[c as usize]);
 
     memory.remove(&registers.data[c as usize]);
 }
 
-pub fn output() {
+pub fn output(registers: &mut Registers, c: u32) {
 
 }
 
-pub fn input() {
+pub fn input(registers: &mut Registers, c: u32) {
 
 }
 
-pub fn loadp(registers: &mut Registers, memory: &Memory, b: u32, c: u32) {
-    // Duplicate the value at $m[$r[B]] and replace $m[0]
-    let segment = memory.get(&(registers.data[b as usize])).unwrap();
-    let mut m0 = memory.get_mut(&0).unwrap();
-    m0 = segment;
+pub fn loadp(registers: &mut Registers, memory: &mut Memory, b: u32, c: u32) {
+    if let Some(segment) = memory.get(&(registers.data[b as usize])) {
+        // Clone the segment to avoid referencing it
+        let cloned_segment: Vec<u32> = segment.clone();
+
+        // Overwrite the value at memory ID 0 with the cloned segment
+        if let Some(m0) = memory.get_mut(&0) {
+            // Clear the existing content of m0 and copy the content of the cloned_segment
+            m0.clear();
+            m0.extend_from_slice(&cloned_segment);
+        }
+    }
 
     // Update the program counter to point to $m[0][$r[C]]
     if let Some(segment) = memory.get(&(registers.data[0])) {
