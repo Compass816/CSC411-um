@@ -99,17 +99,9 @@ pub fn input(registers: &mut Registers, c: u32) {
 }
 
 pub fn loadp(registers: &mut Registers, memory: &mut Memory, b: u32, c: u32) {
-    if let Some(segment) = memory.get(&(registers.data[b as usize])) {
-        // Clone the segment to avoid referencing it
-        let cloned_segment: Vec<u32> = segment.clone();
-
-        // Overwrite the value at memory ID 0 with the cloned segment
-        if let Some(m0) = memory.get_mut(&0) {
-            // Clear the existing content of m0 and copy the content of the cloned_segment
-            m0.clear();
-            m0.extend_from_slice(&cloned_segment);
-        }
-    }
+    // Duplicate the value at $m[$r[B]] and replace $m[0]
+    let segment = memory.get(&(registers.data[b as usize])).unwrap().clone();
+    memory.set(0, segment);
 
     // Update the program counter to point to $m[0][$r[C]]
     if let Some(segment) = memory.get(&(registers.data[0])) {

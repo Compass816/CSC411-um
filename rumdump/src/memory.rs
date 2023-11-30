@@ -30,6 +30,12 @@ impl Memory {
         &mut self.data.get(id)
     }
 
+    pub fn set(&mut self, id: u32, new_val: Vec<u32>) {
+        if self.data.contains_key(&id) {
+            self.data.insert(id, new_val);
+        }
+    }
+
     pub fn add(&mut self, id: u32, val: Vec<u32>) {
         self.data.insert(id, val);
     }
