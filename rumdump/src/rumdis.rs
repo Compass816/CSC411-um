@@ -199,7 +199,7 @@ pub fn disassemble(registers: &mut Registers, memory: &mut Memory, inst: Umi) {
         Some(Opcode::Output) => {
             let c = get(&RC, inst);
 
-            execution::output(registers, c)
+            execution::output(registers, c);
 
             // format!(
             //     "r{} := r{};",

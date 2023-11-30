@@ -1,4 +1,4 @@
-use std::process;
+use std::{process, io::{self, Write}};
 
 use crate::memory::{Memory, Registers, self};
 
@@ -37,17 +37,18 @@ pub fn store(registers: &mut Registers, memory: &mut Memory, a: u32, b: u32, c: 
 }
 
 pub fn add(registers: &mut Registers, a: u32, b: u32, c: u32) {
-    let a = registers.data[a as usize];
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
-    registers.data[a as usize] = (registers.data[b as usize] + registers.data[c as usize]) % (2_u32.pow(32));
+    // % (2_u32.pow(32));
+    registers.data[a as usize] = (b + c);
 }
 
 pub fn mult(registers: &mut Registers, a: u32, b: u32, c: u32) {
     let a = registers.data[a as usize];
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
-    registers.data[a as usize] = (registers.data[b as usize] * registers.data[c as usize]) % (2_u32.pow(32));
+    // % (2_u32.pow(32));
+    registers.data[a as usize] = (registers.data[b as usize] * registers.data[c as usize]);
 }
 
 pub fn div(registers: &mut Registers, a: u32, b: u32, c: u32) {
@@ -90,8 +91,16 @@ pub fn unmap(registers: &mut Registers, memory: &mut Memory, c: u32) {
     memory.remove(&registers.data[c as usize]);
 }
 
-pub fn output(registers: &mut Registers, c: u32) {
+pub fn output(registers: &mut Registers, c: u32) -> io::Result<()> {
+    let c = registers.data[c as usize];
 
+    let mut stdout = io::stdout().lock();
+    let c_bytes: &[u8] = &c.to_ne_bytes(); // Convert integer to bytes
+
+    stdout.write_all(c_bytes)?;
+    stdout.flush()?;
+
+    Ok(())
 }
 
 pub fn input(registers: &mut Registers, c: u32) {
@@ -111,8 +120,6 @@ pub fn loadp(registers: &mut Registers, memory: &mut Memory, b: u32, c: u32) {
     }
 }
 
-pub fn loadv(registers: &mut Registers, rv: u32, vl: u32) {
-    let a = registers.data[rv as usize];
-
-    registers.data[a as usize] = vl as u32;
+pub fn loadv(registers: &mut Registers, a: u32, vl: u32) {
+    registers.data[a as usize] = vl;
 }
