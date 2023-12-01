@@ -13,26 +13,39 @@ pub fn cmov(registers: &mut Registers, a: u32, b: u32, c: u32) {
 }
 
 pub fn load(registers: &mut Registers, memory: &mut Memory, a: u32, b: u32, c: u32) {
-    let a = registers.data[a as usize];
-    let b = registers.data[b as usize];
-    let c = registers.data[c as usize];
+    let ra = registers.data[a as usize];
+    let rb = registers.data[b as usize];
+    let rc = registers.data[c as usize];
 
-    if let Some(segment) = memory.get(&(registers.data[b as usize])) {
-        if let Some(value) = segment.get(registers.data[c as usize] as usize) {
+    println!("a={}, b={}, c={}", a, b, c);
+    println!("$r[a]={} $r[b]={}, $r[c]={}", ra, rb, rc);
+
+    println!("Loading {} from $m[{}][{}]", ra, rb, rc);
+
+    if let Some(segment) = memory.get(&rb) {
+        if let Some(value) = segment.get(rc as usize) {
             registers.data[a as usize] = *value;
         }
     }
 }
 
 pub fn store(registers: &mut Registers, memory: &mut Memory, a: u32, b: u32, c: u32) {
-    let a = registers.data[a as usize];
-    let b = registers.data[b as usize];
-    let c = registers.data[c as usize];
+    let ra = registers.data[a as usize];
+    let rb = registers.data[b as usize];
+    let rc = registers.data[c as usize];
 
-    if let Some(segment) = memory.get(&(registers.data[a as usize])) {
-        if let Some(mut value) = segment.get(registers.data[b as usize] as usize) {
-            value = &registers.data[c as usize];
-        }
+    println!("a={}, b={}, c={}", a, b, c);
+    println!("$r[a]={} $r[b]={}, $r[c]={}", ra, rb, rc);
+
+    println!("Storing {} to $m[{}][{}]", rc, ra, rb);
+
+    // Get the vec for the correspodning ID, $r[a]
+    if let Some(segment) = memory.get(&ra) {
+        // Clone the vec and update it at the index $r[b] with $r[c]
+        let mut new_vec = Some(segment).unwrap().clone();
+        new_vec[rb as usize] = rc;
+
+        memory.set(ra, new_vec);
     }
 }
 
@@ -44,18 +57,16 @@ pub fn add(registers: &mut Registers, a: u32, b: u32, c: u32) {
 }
 
 pub fn mult(registers: &mut Registers, a: u32, b: u32, c: u32) {
-    let a = registers.data[a as usize];
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
     // % (2_u32.pow(32));
-    registers.data[a as usize] = (registers.data[b as usize] * registers.data[c as usize]);
+    registers.data[a as usize] = (b * c);
 }
 
 pub fn div(registers: &mut Registers, a: u32, b: u32, c: u32) {
-    let a = registers.data[a as usize];
     let b = registers.data[b as usize];
     let c = registers.data[c as usize];
-    registers.data[a as usize] = registers.data[b as usize] / registers.data[c as usize];
+    registers.data[a as usize] = (b / c);
 }
 
 pub fn nand(registers: &mut Registers, a: u32, b: u32, c: u32) {
@@ -70,18 +81,30 @@ pub fn halt() {
 }
 
 pub fn map(registers: &mut Registers, memory: &mut Memory, b: u32, c: u32) {
-    let seg = vec![0_u32; registers.data[c as usize] as usize];
 
-    // Grab the highest unused id if there are no previously unmapped ids available
-    let mut id = 0_u32;
+    if c != 0 {
+        let rb = registers.data[b as usize];
+        let rc = registers.data[c as usize];
 
-    if memory.mem_ids.is_empty() {
-        id = memory.latest_id;
-    } else {
-        id = memory.mem_ids[0];
+        let seg = vec![0_u32; rc as usize];
+
+        // Grab the highest unused id if there are no previously unmapped ids available
+        let mut id = 0_u32;
+    
+        if memory.mem_ids.is_empty() {
+            id = memory.latest_id;
+        } else {
+            id = memory.mem_ids[0];
+        }
+    
+        // The id is placed in register b
+        registers.data[b as usize] = id;
+
+        println!("b={}, c={}", b, c);
+        println!("$r[b]={}, $r[c]={}", rb, rc);    
+    
+        memory.add(id, seg);
     }
-
-    memory.add(id, seg);
 }
 
 pub fn unmap(registers: &mut Registers, memory: &mut Memory, c: u32) {
