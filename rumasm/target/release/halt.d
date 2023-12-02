@@ -1,0 +1,1 @@
+C:\Users\brook\Documents\Workspaces\CSC\ 411\GitHub\um\rumasm\target\release\halt.exe: C:\Users\brook\Documents\Workspaces\CSC\ 411\GitHub\um\rumasm\src\bin\halt.rs C:\Users\brook\Documents\Workspaces\CSC\ 411\GitHub\um\rumasm\src\lib.rs C:\Users\brook\Documents\Workspaces\CSC\ 411\GitHub\um\rumasm\src\rumasm.rs

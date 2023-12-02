@@ -1,0 +1,1 @@
+C:\Users\brook\Documents\Workspaces\CSC\ 411\GitHub\um\rumasm\target\release\math2.exe: C:\Users\brook\Documents\Workspaces\CSC\ 411\GitHub\um\rumasm\src\bin\math2.rs C:\Users\brook\Documents\Workspaces\CSC\ 411\GitHub\um\rumasm\src\lib.rs C:\Users\brook\Documents\Workspaces\CSC\ 411\GitHub\um\rumasm\src\rumasm.rs

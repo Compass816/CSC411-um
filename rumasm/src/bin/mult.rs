@@ -6,13 +6,13 @@ use rumasm::rumasm::mult;
 
 pub fn main() {
     asm(loadv(7, 10)); // linefeed
-    asm(loadv(0, 53)); // 5
-    asm(loadv(1, 51)); // 3
+    asm(loadv(0, 33));
+    asm(loadv(1, 3));
     asm(output(0));
     asm(output(7));
     asm(output(1));
     asm(output(7));
-    asm(mult(2, 0, 1));
+    asm(mult(2, 0, 1)); // $r[a] = $r[b] * $r[c]
     asm(output(2));
     asm(output(7));
     asm(halt())

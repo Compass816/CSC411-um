@@ -6,13 +6,13 @@ use rumasm::rumasm::div;
 
 pub fn main() {
     asm(loadv(7, 10)); // linefeed
-    asm(loadv(0, 99));
-    asm(loadv(1, 33));
+    asm(loadv(0, 100));
+    asm(loadv(1, 2));
     asm(output(0));
     asm(output(7));
     asm(output(1));
     asm(output(7));
-    asm(div(2, 0, 1)); // Should be 3 in ASCII
+    asm(div(2, 0, 1)); // $r[a] = $r[b] / $r[c]
     asm(output(2));
     asm(output(7));
     asm(halt())

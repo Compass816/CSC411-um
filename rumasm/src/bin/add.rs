@@ -12,7 +12,7 @@ pub fn main() {
     asm(output(7));
     asm(output(1));
     asm(output(7));
-    asm(add(2, 0, 1));
+    asm(add(2, 0, 1)); // $r[a] = $r[b] + $r[c]
     asm(output(2));
     asm(output(7));
     asm(halt())
